@@ -937,10 +937,121 @@ section { padding: 96px 0; position: relative; }
   .problem-solution { grid-template-columns: 1fr; gap: 32px; }
 }
 
+/* === 41. PAYMENT PARTNER BANNER === */
+.payment-partner {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 16px 24px;
+  text-decoration: none;
+  transition: all 0.4s var(--ease);
+  cursor: pointer;
+  width: fit-content;
+}
+
+.payment-partner:hover {
+  border-color: var(--red);
+  transform: translateY(-3px);
+  box-shadow: 0 0 20px var(--red-glow);
+}
+
+.payment-partner__logo {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  border-right: 1px solid var(--line);
+  padding-right: 20px;
+}
+
+.payment-partner__info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.payment-partner__title {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.payment-partner__subtitle {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.payment-partner__badge {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--red);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  flex-shrink: 0;
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+.payment-partner__badge span {
+  display: inline-block;
+  transition: transform 0.3s var(--ease);
+}
+
+.payment-partner:hover .payment-partner__badge span {
+  transform: translateX(4px);
+}
+
+.payment-partner--full {
+  width: 100%;
+  margin-bottom: 40px;
+}
+
+/* === 42. TRUST BADGE === */
+.trust-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 16px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.trust-badge svg {
+  height: 14px;
+  width: auto;
+}
+
 @media (max-width: 768px) {
   .drive-cards-grid { grid-template-columns: 1fr; }
   .problem-solution { grid-template-columns: 1fr; gap: 24px; }
   .pricing-variant__head { flex-direction: column; gap: 4px; }
   .pricing-variant__price { font-size: 16px; }
   .svc-card-price { font-size: 13px; }
+  .payment-partner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    width: 100%;
+  }
+  .payment-partner__logo {
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+    padding-right: 0;
+    padding-bottom: 12px;
+    width: 100%;
+  }
+  .payment-partner__badge {
+    margin-left: 0;
+    margin-top: 8px;
+  }
 }
