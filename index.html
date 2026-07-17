@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DURDOM AI STUDIO — AI-продакшн для артистов и шоу</title>
+  <meta name="description" content="AI-продакшн студия: сценический визуал, клипы, промо и AI-образы артистов. От концепта до финала под спеки площадки." />
+  <meta property="og:title" content="DURDOM AI STUDIO — AI-продакшн для артистов и шоу" />
+  <meta property="og:description" content="Сценический визуал, клипы, промо и AI-образы. Любые форматы и разрешения." />
+  <meta property="og:type" content="website" />
+  <link rel="icon" type="image/svg+xml" href="mark.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700;800&family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <div class="global-bg"></div>
+  <canvas class="global-canvas" id="global-canvas"></canvas>
+
+  <!-- ========== NAVIGATION ========== -->
+  <header class="site-nav" id="site-nav">
+    <div class="container">
+      <a href="index.html" class="nav-logo">
+        <img src="logo_horizontal.svg" alt="DURDOM AI STUDIO" />
+      </a>
+      <nav class="nav-links" id="nav-links">
+        <a href="index.html" class="is-active" data-nav>Главная</a>
+        <a href="works.html" data-nav>Работы</a>
+        <a href="arsenal.html" data-nav>Арсенал</a>
+        <a href="index.html#process" data-nav>Процесс</a>
+        <a href="index.html#faq" data-nav>FAQ</a>
+        <a href="index.html#inquiry" data-nav>Контакт</a>
+      </nav>
+      <a href="index.html#inquiry" class="btn btn--primary nav-cta">Обсудить проект</a>
+      <button class="nav-burger" id="nav-burger" type="button" aria-label="Меню">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+  <nav class="mobile-menu" id="mobile-menu" aria-hidden="true">
+    <a href="index.html" data-mobile-nav>Главная</a>
+    <a href="works.html" data-mobile-nav>Работы</a>
+    <a href="arsenal.html" data-mobile-nav>Арсенал</a>
+    <a href="index.html#process" data-mobile-nav>Процесс</a>
+    <a href="index.html#faq" data-mobile-nav>FAQ</a>
+    <a href="index.html#inquiry" data-mobile-nav>Контакт</a>
+    <a href="index.html#inquiry" class="btn btn--primary" data-mobile-nav>Обсудить проект</a>
+  </nav>
+
+  <main>
+
+    <!-- ========== 01 · HERO ========== -->
+    <section class="hero" id="hero">
+      <!-- Video background -->
+      <div class="hero__video-wrap" id="hero-video-wrap">
+        <video class="hero__video" id="hero-bg-video" muted loop playsinline preload="metadata"></video>
+      </div>
+      <!-- Darken overlay -->
+      <div class="hero__overlay"></div>
+      <!-- Aurora + particles -->
+      <div class="aurora"></div>
+      <canvas class="hero__canvas" id="hero-canvas"></canvas>
+      <div class="vignette"></div>
+      <div class="grain"></div>
+
+      <div class="container hero__inner">
+        <div class="content">
+          <div class="tag">AI PRODUCTION STUDIO</div>
+          <h1 class="wordmark">
+            <span class="l1" id="wm-title"></span>
+            <span class="l2">AI STUDIO</span>
+          </h1>
+          <div class="bar"></div>
+          <p class="sub">AI&#8209;продакшн для артистов и&nbsp;шоу. Сценический визуал, клипы, промо и&nbsp;AI&#8209;образы&nbsp;— от&nbsp;концепта до&nbsp;финала под&nbsp;спеки площадки.</p>
+          <div class="cta">
+            <a href="#inquiry" class="btn btn-primary">Обсудить проект</a>
+            <button class="btn btn-ghost" id="showreel-play-btn" type="button">Смотреть шоурил</button>
+          </div>
+        </div>
+        <!-- Task 5: updated chips -->
+        <div class="chips">Любые форматы и разрешения — от вертикали для соцсетей до 4K+ под LED-экраны · финал под спеки любой площадки</div>
+      </div>
+      <!-- Task 8: mute toggle -->
+      <button class="hero-mute-toggle" id="hero-mute-toggle" type="button" aria-label="Включить звук">🔇</button>
+    </section>
+
+    <!-- Showreel overlay -->
+    <div class="showreel-overlay" id="showreel-overlay" aria-hidden="true">
+      <button class="showreel-overlay__close" id="showreel-close" aria-label="Закрыть">×</button>
+      <video class="showreel-overlay__video" id="showreel-video" controls playsinline preload="none"></video>
+    </div>
+
+    <!-- ========== MARQUEE (Task 5) ========== -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee__inner">
+        <span class="marquee__item">ШОУ</span><span class="marquee__dot">●</span>
+        <span class="marquee__item">ПРОДАКШН</span><span class="marquee__dot">●</span>
+        <span class="marquee__item">ГЕНЕРАЦИЯ ВИДЕО С ИИ</span><span class="marquee__dot">●</span>
+        <span class="marquee__item">AI-АВАТАРЫ</span><span class="marquee__dot">●</span>
+        <span class="marquee__item">КЛИПЫ</span><span class="marquee__dot">●</span>
+        <span class="marquee__item">ПРОМО</span><span class="marquee__dot">●</span>
+        <span class="marquee__item">БАННЕРЫ</span><span class="marquee__dot">●</span>
+        <span class="marquee__item">СЦЕНИЧЕСКИЙ ВИЗУАЛ</span><span class="marquee__dot">●</span>
+        <span class="marquee__item">LED-ЭКРАНЫ</span><span class="marquee__dot">●</span>
+        <span class="marquee__item">LIPSYNC</span><span class="marquee__dot">●</span>
+        <span class="marquee__item">КОНЦЕПТ-АРТ</span><span class="marquee__dot">●</span>
+        <span class="marquee__item">МОНТАЖ</span><span class="marquee__dot">●</span>
+        <span class="marquee__item">ШОУ</span><span class="marquee__dot">●</span>
+        <span class="marquee__item">ПРОДАКШН</span><span class="marquee__dot">●</span>
+        <span class="marquee__item">ГЕНЕРАЦИЯ ВИДЕО С ИИ</span><span class="marquee__dot">●</span>
+        <span class="marquee__item">AI-АВАТАРЫ</span><span class="marquee__dot">●</span>
+        <span class="marquee__item">КЛИПЫ</span><span class="marquee__dot">●</span>
+        <span class="marquee__item">ПРОМО</span><span class="marquee__dot">●</span>
+        <span class="marquee__item">БАННЕРЫ</span><span class="marquee__dot">●</span>
+        <span class="marquee__item">СЦЕНИЧЕСКИЙ ВИЗУАЛ</span><span class="marquee__dot">●</span>
+        <span class="marquee__item">LED-ЭКРАНЫ</span><span class="marquee__dot">●</span>
+        <span class="marquee__item">LIPSYNC</span><span class="marquee__dot">●</span>
+        <span class="marquee__item">КОНЦЕПТ-АРТ</span><span class="marquee__dot">●</span>
+        <span class="marquee__item">МОНТАЖ</span><span class="marquee__dot">●</span>
+      </div>
+    </div>
+
+    <!-- ========== 02 · SERVICES (Task 3) ========== -->
+    <section id="services">
+      <div class="container">
+        <div class="section-head reveal">
+          <div class="section-label">02 · УСЛУГИ</div>
+          <h2>Что мы делаем</h2>
+          <p>Полный цикл AI-продакшна — от брифа до финального файла. Прайс — по запросу в Telegram.</p>
+        </div>
+        <div class="product-grid" id="services-grid"></div>
+      </div>
+    </section>
+
+    <!-- Service Modal (Task 3) -->
+    <div class="modal" id="service-modal" aria-hidden="true">
+      <div class="modal__overlay" data-modal-close></div>
+      <div class="modal__dialog" role="dialog" aria-modal="true" aria-labelledby="svc-modal-title">
+        <button class="modal__close" type="button" data-modal-close aria-label="Закрыть">×</button>
+        <div class="modal__media">
+          <div class="modal__cover" style="background:linear-gradient(135deg,#0a0a0a,#1a0808);display:flex;align-items:center;justify-content:center;min-height:300px">
+            <span style="font-family:var(--font-display);font-size:32px;font-weight:800;color:var(--ink);opacity:.3;text-transform:uppercase">DURDOM</span>
+          </div>
+        </div>
+        <div class="modal__content">
+          <div class="modal__crumb" style="font-family:var(--font-mono);font-size:11px;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:16px">Услуги</div>
+          <h2 id="svc-modal-title"></h2>
+          <div class="modal__section"><span>Описание</span><p id="svc-modal-description"></p></div>
+          <div class="modal__section"><span>Что входит</span><ul class="modal__features" id="svc-modal-features"></ul></div>
+          <div class="modal__section"><span>Технологии</span><div class="modal__tags" id="svc-modal-tags"></div></div>
+          <div class="modal__section"><span class="pricing-label">ПРАЙС</span><div id="svc-modal-pricing"></div></div>
+          <a href="#inquiry" class="btn btn--primary btn--full" data-modal-close>Обсудить проект <span>→</span></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-line"></div>
+
+    <!-- ========== 03 · WORKS PREVIEW ========== -->
+    <section id="showreel">
+      <div class="container">
+        <div class="section-head reveal">
+          <div class="section-label">03 · РАБОТЫ</div>
+          <h2>Портфолио</h2>
+          <p>Кейсы, клипы, промо и AI-образы. Только SFW-контент.</p>
+        </div>
+
+        <!-- OG Buda featured -->
+        <div class="featured-case reveal" id="featured-case"></div>
+        <!-- Works grid from assets.js -->
+        <div class="showreel-grid" id="showreel-grid"></div>
+
+        <!-- Task 4: Google Drive portfolio links -->
+        <div class="drive-cards-grid reveal">
+          <a href="https://drive.google.com/drive/u/0/folders/1uKZxNZy6cyhTm8up0E-hTRHEQsz2lCz-" target="_blank" rel="noopener" class="drive-card" id="drive-photo">
+            <div class="drive-card__preview" style="background:linear-gradient(135deg,#16161a,#1a0808)">
+              <span class="drive-card__icon">📸</span>
+              <span class="drive-card__title">ФОТО</span>
+            </div>
+            <div class="drive-card__label">Смотреть архив в Google Drive <span class="drive-card__arrow">→</span></div>
+          </a>
+          <a href="https://drive.google.com/drive/u/0/folders/1bvKDHB0F9IIdoLWJG09wsCSOWmcuOzgq" target="_blank" rel="noopener" class="drive-card" id="drive-video">
+            <div class="drive-card__preview" style="background:linear-gradient(135deg,#16161a,#0a0515)">
+              <span class="drive-card__icon">🎬</span>
+              <span class="drive-card__title">ВИДЕО</span>
+            </div>
+            <div class="drive-card__label">Смотреть архив в Google Drive <span class="drive-card__arrow">→</span></div>
+          </a>
+        </div>
+
+        <div style="text-align:center;margin-top:40px" class="reveal">
+          <a href="works.html" class="btn btn--secondary">Все работы →</a>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-line"></div>
+
+    <!-- ========== 04 · PROCESS ========== -->
+    <section id="process">
+      <div class="container">
+        <div class="section-head reveal">
+          <div class="section-label">04 · ПРОЦЕСС</div>
+          <h2>Как работаем</h2>
+          <p>Пять шагов от идеи до готового файла.</p>
+        </div>
+        <div class="process-timeline reveal">
+          <div class="process-step"><div class="process-step__number">01</div><div><h3>Бриф</h3><p>Обсуждаем задачу, формат, площадку, спеки и дедлайн.</p></div></div>
+          <div class="process-step"><div class="process-step__number">02</div><div><h3>Концепт-карты</h3><p>Визуальные референсы, мудборды и раскадровка.</p></div></div>
+          <div class="process-step"><div class="process-step__number">03</div><div><h3>Генерация</h3><p>Подбираем лучший пайплайн под задачу и запускаем.</p></div></div>
+          <div class="process-step"><div class="process-step__number">04</div><div><h3>Монтаж и грейдинг</h3><p>Сборка, композитинг, цветокор, ритм и звук.</p></div></div>
+          <div class="process-step"><div class="process-step__number">05</div><div><h3>Финал</h3><p>Под спеки площадки: формат, кодек, fps, разрешение.</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-line"></div>
+
+    <!-- ========== 05 · STACK & SKILLS (Task 6) ========== -->
+    <section id="stack">
+      <div class="container">
+        <div class="section-head reveal">
+          <div class="section-label">05 · СТЕК И СКИЛЫ</div>
+          <h2>Технологии</h2>
+        </div>
+        <div class="stack-grid reveal">
+          <div class="stack-row">
+            <div class="stack-row__label">Генерация</div>
+            <div class="stack-row__items">Работаем со всеми ведущими AI-моделями — графическими, видео и текстовыми: от топовых закрытых (Google, OpenAI, Kling, ByteDance и др.) до open-source стека и собственных ComfyUI-пайплайнов и workflow</div>
+          </div>
+          <div class="stack-row">
+            <div class="stack-row__label">Обучение моделей</div>
+            <div class="stack-row__items">Тренируем кастомные модели и персонажей под задачу: LoRA-тренинг, контроль позы и композиции, бренд-персоны с устойчивой внешностью</div>
+          </div>
+          <div class="stack-row">
+            <div class="stack-row__label">Инфраструктура</div>
+            <div class="stack-row__items">Собственные GPU-мощности и облачные кластеры — разворачиваем и оптимизируем пайплайны под любой объём</div>
+          </div>
+          <div class="stack-row">
+            <div class="stack-row__label">Пост и сборка</div>
+            <div class="stack-row__items">Профессиональный пост-продакшн: монтаж, композитинг, цветокор, саунд — в индустриальных редакторах и своих инструментах</div>
+          </div>
+          <div class="stack-row">
+            <div class="stack-row__label">Спец</div>
+            <div class="stack-row__items">Lipsync, оживление персонажей, перенос движения, face-work, детекция и поза — полный набор спецтехник AI-видео</div>
+          </div>
+          <div class="stack-row">
+            <div class="stack-row__label">Доставка</div>
+            <div class="stack-row__items">Финалы в любых форматах и разрешениях — вертикаль/квадрат/широкий, 2K, 4K и выше, любые кодеки и fps, LED-ready, под требования конкретной площадки или платформы</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-line"></div>
+
+    <!-- ========== 06 · REVIEWS ========== -->
+    <section id="reviews">
+      <div class="container">
+        <div class="section-head reveal">
+          <div class="section-label">06 · ОТЗЫВЫ</div>
+          <h2>Что говорят</h2>
+        </div>
+        <div class="reviews-wrap reveal">
+          <div class="reviews-slider" id="reviews-slider">
+            <article class="review-card"><div class="review-card__header"><img class="review-card__avatar" src="https://i.pravatar.cc/88?img=11" alt="Артём" loading="lazy" /><div><div class="review-card__name">Артём</div><div class="review-card__role">AI-креатор</div></div></div><div class="review-card__text">Система Animator — это реально топ. За пару дней собрал воронку, которая работает на автомате. Поддержка в чате всегда на связи.</div><div class="review-card__stars">★★★★★</div></article>
+            <article class="review-card"><div class="review-card__header"><img class="review-card__avatar" src="https://i.pravatar.cc/88?img=12" alt="Илья" loading="lazy" /><div><div class="review-card__name">Илья</div><div class="review-card__role">Фрилансер</div></div></div><div class="review-card__text">X-MODE даёт уровень реализма, который раньше был только в дорогих студиях. Лица, кожа, детали — всё фотореал. Окупил за первую неделю.</div><div class="review-card__stars">★★★★★</div></article>
+            <article class="review-card"><div class="review-card__header"><img class="review-card__avatar" src="https://i.pravatar.cc/88?img=33" alt="Никита" loading="lazy" /><div><div class="review-card__name">Никита</div><div class="review-card__role">Продюсер</div></div></div><div class="review-card__text">Комьюнити — это не просто чат, а реальная система. Гайды, обновления, разборы кейсов. Ничего лишнего, только рабочие связки.</div><div class="review-card__stars">★★★★★</div></article>
+            <article class="review-card"><div class="review-card__header"><img class="review-card__avatar" src="https://i.pravatar.cc/88?img=53" alt="Данил" loading="lazy" /><div><div class="review-card__name">Данил</div><div class="review-card__role">Контент-мейкер</div></div></div><div class="review-card__text">Пришёл без опыта, за две недели запустил первого AI-персонажа. Курс по Higgsfield — лучший вход в нишу видео.</div><div class="review-card__stars">★★★★★</div></article>
+            <article class="review-card"><div class="review-card__header"><img class="review-card__avatar" src="https://i.pravatar.cc/88?img=59" alt="Максим" loading="lazy" /><div><div class="review-card__name">Максим</div><div class="review-card__role">SMM-специалист</div></div></div><div class="review-card__text">Качество визуала — на уровне продакшн-студии. Для моих клиентов это идеальное решение: быстро, красиво, стабильно.</div><div class="review-card__stars">★★★★★</div></article>
+          </div>
+          <div class="reviews-arrows"><button class="reviews-arrow" id="reviews-prev" aria-label="Предыдущий">←</button><button class="reviews-arrow" id="reviews-next" aria-label="Следующий">→</button></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-line"></div>
+
+    <!-- ========== 07 · FAQ (Task 7: expanded) ========== -->
+    <section id="faq">
+      <div class="container">
+        <div class="section-head reveal">
+          <div class="section-label">07 · FAQ</div>
+          <h2>Частые вопросы</h2>
+        </div>
+        <div class="faq-list reveal" id="faq-list">
+          <div class="faq-item"><button class="faq-q" aria-expanded="false">Что такое DURDOM AI STUDIO?</button><div class="faq-a" role="region"><p>DURDOM AI STUDIO — это AI-продакшн студия для артистов, шоу и брендов. Мы создаём сценический визуал, клипы, промо, AI-образы и контент — от концепта до финального файла. Работаем со всеми ведущими AI-моделями и собственными пайплайнами.</p></div></div>
+
+          <div class="faq-item"><button class="faq-q" aria-expanded="false">Сколько стоит проект?</button><div class="faq-a" role="region"><p>Каждый проект считается индивидуально — зависит от объёма, сроков и формата. Напиши в Telegram <a href="https://t.me/Pravaka" target="_blank" style="color:var(--red)">@Pravaka</a> или оставь заявку — пришлём прайс и предложим варианты под бюджет.</p></div></div>
+
+          <div class="faq-item"><button class="faq-q" aria-expanded="false">Какие сроки?</button><div class="faq-a" role="region"><p>Экспресс-задачи (баннер, пост, короткий ролик) — от 1 до 3 дней. Стандартные проекты (клип, промо, серия AI-образов) — от 3 до 14 дней. Сложные проекты (полный сценический визуал, пакет контента) — обсуждаем индивидуально. Срок зависит от объёма, формата и текущей загрузки.</p></div></div>
+
+          <div class="faq-item"><button class="faq-q" aria-expanded="false">Какие форматы вы делаете?</button><div class="faq-a" role="region"><p>Любые: видео для LED-экранов (4K и выше, Hap, любой fps), клипы, промо-ролики, AI-фото, lipsync-видео, motion-графику, баннеры, афиши, обложки. Финал — строго под спеки площадки: разрешение, кодек, fps, цветовой профиль.</p></div></div>
+
+          <div class="faq-item"><button class="faq-q" aria-expanded="false">Как устроен процесс работы?</button><div class="faq-a" role="region"><p>Бриф → Концепт-карты и мудборды → AI-генерация → Монтаж и грейдинг → Финал под спеки площадки. На каждом этапе — согласование. Обычно весь цикл занимает от 3 до 14 дней в зависимости от объёма.</p></div></div>
+
+          <div class="faq-item"><button class="faq-q" aria-expanded="false">Делаете ли AI-аватаров под ключ?</button><div class="faq-a" role="region"><p>Да. Создаём полный образ: внешность, стиль, сеттинг. Тренируем LoRA под лицо, настраиваем контент-систему, обучаем работе. На выходе — готовый аватар с возможностью генерить контент самостоятельно или заказывать у нас.</p></div></div>
+
+          <div class="faq-item"><button class="faq-q" aria-expanded="false">Можно ли заказать баннеры, афиши, креативы?</button><div class="faq-a" role="region"><p>Да, для любых ниш: шоу, бизнес, e-com, digital. Ключевые визуалы, афиши концертов, обложки альбомов, баннеры для маркетплейсов, рекламные креативы. От концепта до финальных макетов в нужных форматах.</p></div></div>
+
+          <div class="faq-item"><button class="faq-q" aria-expanded="false">Что такое Арсенал?</button><div class="faq-a" role="region"><p>Арсенал — закрытый раздел с инструментами для самостоятельной работы: ComfyUI-workflows (Animator, X-MODE), курсы, приватное комьюнити, Fansly-связки и верификации. Для тех, кто хочет систему, а не только заказ. <a href="arsenal.html" style="color:var(--red)">Открыть Арсенал →</a></p></div></div>
+
+          <div class="faq-item"><button class="faq-q" aria-expanded="false">Работаете ли с NSFW / OFM?</button><div class="faq-a" role="region"><p>Да, в закрытом формате. Инструменты и связки — в Арсенале (X-MODE, Fansly-связка, верификации). Услуги по NSFW — по запросу. На публичных страницах сайта только SFW-контент.</p></div></div>
+
+          <div class="faq-item"><button class="faq-q" aria-expanded="false">Что такое Fansly-связка?</button><div class="faq-a" role="region"><p>Внутренняя система прямого трафика через FYP Fansly — без прогрева инсты и сложных воронок. Быстрый выход на заработок с AI-аватаром. Подробности — в <a href="arsenal.html" style="color:var(--red)">Арсенале</a>.</p></div></div>
+
+          <div class="faq-item"><button class="faq-q" aria-expanded="false">Нужен ли мощный компьютер?</button><div class="faq-a" role="region"><p>Для заказа продакшна — нет, всё делаем мы. Для Арсенала (workflows Animator, X-MODE) нужен GPU: RTX 3090+ или облачный сервер (Vast.ai, RunPod). Для курса по Higgsfield — только браузер.</p></div></div>
+
+          <div class="faq-item"><button class="faq-q" aria-expanded="false">Как оплатить?</button><div class="faq-a" role="region"><p>Крипто (USDT, BTC, ETH и другие) через Cryptomus. Безопасно, быстро, анонимно. Для кастомных проектов — обсуждаем индивидуально.</p></div></div>
+
+          <div class="faq-item"><button class="faq-q" aria-expanded="false">Есть ли возврат?</button><div class="faq-a" role="region"><p>Цифровые продукты возврату не подлежат после получения доступа — это стандарт индустрии. Подробности — в <a href="refund.html" style="color:var(--red)">Refund Policy</a>. Если есть вопрос — всегда можно написать.</p></div></div>
+
+          <div class="faq-item"><button class="faq-q" aria-expanded="false">Предоставляете ли исходники?</button><div class="faq-a" role="region"><p>По договорённости. Финальные файлы — всегда. Исходники проекта (проектные файлы, сырые материалы, LoRA-модели) — опционально, обсуждается на этапе брифа.</p></div></div>
+
+          <div class="faq-item"><button class="faq-q" aria-expanded="false">Как проходит созвон / бриф?</button><div class="faq-a" role="region"><p>Через Telegram, 15–30 минут. Обсуждаем задачу, показываю релевантные кейсы, предлагаю варианты. После — фиксируем бриф и стартуем. Можно и перепиской, если удобнее.</p></div></div>
+
+          <div class="faq-item"><button class="faq-q" aria-expanded="false">Можно ли заказать индивидуальный проект?</button><div class="faq-a" role="region"><p>Да. Заполни форму ниже или напиши напрямую в Telegram <a href="https://t.me/Pravaka" target="_blank" style="color:var(--red)">@Pravaka</a>. Разберём задачу, предложим решение и озвучим сроки.</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-line"></div>
+
+    <!-- ========== 08 · INQUIRY ========== -->
+    <section id="inquiry">
+      <div class="container">
+        <div class="inquiry-grid">
+          <div class="inquiry-info reveal">
+            <div class="section-label">08 · ЗАЯВКА</div>
+            <h2>Обсудить проект</h2>
+            <p>Расскажи о задаче — мы ответим в течение 24 часов с концепцией и ценой.</p>
+            <div class="inquiry-trust">
+              <div>Ответ в течение 24 часов</div>
+              <div>Telegram / сайт / крипто</div>
+              <div>Конфиденциальность данных</div>
+            </div>
+          </div>
+          <form class="lead-form reveal" id="inquiry-form" autocomplete="off">
+            <label>Имя<input type="text" name="name" id="inq-name" placeholder="Как к тебе обращаться?" required /></label>
+            <label>Telegram / контакт<input type="text" name="telegram" id="inq-telegram" placeholder="@username или другой контакт" required /></label>
+            <label>Что интересно?
+              <select name="product" id="inq-product" required>
+                <option value="">Выбери направление</option>
+                <option value="Продакшн под шоу">Продакшн под шоу / LED-визуал</option>
+                <option value="Клип / Промо">Клип / Промо-ролик</option>
+                <option value="AI-аватары">AI-аватары под ключ</option>
+                <option value="Баннеры и визуал">Баннеры / Афиши / Креативы</option>
+                <option value="Lipsync">Lipsync / оживление</option>
+                <option value="Animator V2.1">Animator V2.1 — $100</option>
+                <option value="X-MODE V2.1">X-MODE V2.1 — $100</option>
+                <option value="Private Community">Private Community — $190</option>
+                <option value="Fansly-связка">Fansly-связка — $100</option>
+                <option value="Higgsfield AI Video Course">Higgsfield Course — $50</option>
+                <option value="Consultation">Консультация</option>
+              </select>
+            </label>
+            <label>Сообщение<textarea name="message" id="inq-message" rows="4" placeholder="Коротко опиши задачу: формат, площадка, сроки"></textarea></label>
+            <button class="btn btn--primary btn--full" id="inquiry-submit" type="submit"><span id="submit-text">Отправить заявку</span></button>
+            <div class="form-status" id="form-status"></div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img src="logo_primary.svg" alt="DURDOM AI STUDIO" class="footer-logo" style="height:48px;margin-bottom:16px" />
+          <p>AI-продакшн студия для артистов, шоу и брендов. Сценический визуал, клипы, промо и AI-образы.</p>
+          <div class="footer-contact-info">
+            <div>Durdom · +905350475821 · Snumbakaramba@gmail.com</div>
+            <div>Thailand, On nut Rd, Suan Luang 10250</div>
+          </div>
+          <a href="DURDOM_AI_STUDIO_onepager.pdf" target="_blank" class="btn btn--secondary" style="margin-top:20px;font-size:13px;padding:10px 20px">📄 Скачать презентацию</a>
+        </div>
+        <div class="footer-socials">
+          <a href="https://t.me/Pravaka" target="_blank" rel="noopener" class="social-card">
+            <div class="social-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2L15 22L11 13M11 13L2 9L22 2"/></svg></div>
+            <div class="social-card__info"><strong>Telegram</strong><span>@Pravaka</span></div>
+            <svg class="social-card__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="https://instagram.com/durdomcore" target="_blank" rel="noopener" class="social-card">
+            <div class="social-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></div>
+            <div class="social-card__info"><strong>Instagram</strong><span>@durdomcore</span></div>
+            <svg class="social-card__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="https://t.me/durdomcore" target="_blank" rel="noopener" class="social-card">
+            <div class="social-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2L15 22L11 13M11 13L2 9L22 2"/></svg></div>
+            <div class="social-card__info"><strong>Telegram канал</strong><span>@durdomcore</span></div>
+            <svg class="social-card__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="footer-legal">
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="refund.html">Refund Policy</a>
+          <a href="terms.html">Terms of Service</a>
+        </div>
+        <div class="footer-copy">© 2024–2026 DURDOM AI STUDIO. All rights reserved.</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========== LIGHTBOX ========== -->
+  <div class="photo-lightbox" id="photo-lightbox"><button class="photo-lightbox__close" aria-label="Close">×</button><img src="" alt="" /></div>
+
+  <!-- ========== SCRIPTS ========== -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+  <script src="assets.js" defer></script>
+  <script src="script.js" defer></script>
+</body>
+</html>
