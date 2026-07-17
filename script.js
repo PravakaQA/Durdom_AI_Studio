@@ -395,7 +395,7 @@
       const tags = p.tags.slice(0, 4).map(t => `<span class="product-card__tag">${t}</span>`).join('');
       const priceStr = p.price === null ? 'По запросу' : (p.price === 0 ? 'FREE' : `$${p.price}`);
       const oldStr = p.oldPrice ? `<s>$${p.oldPrice}</s>` : '';
-      return `<article class="product-card reveal" data-product-open="${p.id}">
+      return `<article class="product-card" data-product-open="${p.id}">
         <div class="product-card__cover">
           <img class="product-card__cover-img" src="${p.coverImage}" alt="${p.title}" loading="lazy" />
           <div class="product-card__badges">${badges}</div>
@@ -497,7 +497,7 @@
       const s = services[id];
       if (!s) return '';
       const tags = s.tags.slice(0, 3).map(t => `<span class="product-card__tag">${t}</span>`).join('');
-      return `<article class="product-card reveal" data-service-open="${s.id}">
+      return `<article class="product-card" data-service-open="${s.id}">
         <div class="product-card__cover service-cover-bg">
           <div class="service-cover-title">${s.cardTitle || s.title}</div>
         </div>
@@ -579,10 +579,6 @@
   }
 
   function initReveal() {
-    if (window.location.protocol === 'file:') {
-      document.querySelectorAll('.reveal').forEach(el => el.classList.add('is-visible'));
-      return;
-    }
     const obs = new IntersectionObserver(entries => {
       entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-visible'); obs.unobserve(e.target); } });
     }, { threshold: 0.12 });
@@ -922,7 +918,6 @@
 
   /* === GSAP ANIMATIONS === */
   function initGSAP() {
-    if (window.location.protocol === 'file:') return;
     if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     gsap.registerPlugin(ScrollTrigger);
