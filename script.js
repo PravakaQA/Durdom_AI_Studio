@@ -11,6 +11,20 @@
   const TELEGRAM_URL = 'https://t.me/Pravaka';
   const A = window.DURDOM_ASSETS || {};
 
+  function showToast(message) {
+    let t = document.querySelector('.toast');
+    if (!t) {
+      t = document.createElement('div');
+      t.className = 'toast';
+      document.body.appendChild(t);
+    }
+    t.textContent = message;
+    t.classList.add('is-show');
+    setTimeout(() => {
+      t.classList.remove('is-show');
+    }, 4000);
+  }
+
   /* ================================================================
      TASK 1 — PRODUCT DATA (Arsenal page)
      Removed: freeguide
@@ -448,7 +462,7 @@
           buyBtn.innerHTML = 'Написать в Telegram <span>→</span>';
           buyBtn.dataset.action = 'telegram';
         } else {
-          buyBtn.innerHTML = 'Купить / Получить доступ <span>→</span>';
+          buyBtn.innerHTML = 'Оплатить криптой <span>→</span>';
           buyBtn.dataset.action = 'buy';
         }
       }
@@ -472,17 +486,28 @@
         const prod = Object.values(products).find(p => p.title === title);
         if (!prod) return;
         if (prod.price === 0) { close(); document.querySelector('#inquiry')?.scrollIntoView({ behavior: 'smooth' }); return; }
-        buyBtn.disabled = true; buyBtn.textContent = 'Создаём платёж...';
+        buyBtn.disabled = true; buyBtn.innerHTML = 'Создаём платёж... <span class="spinner"></span>';
+        
+        const apiIdMap = {
+          'higgsfield': 'higgsfield_course',
+          'animator1': 'animator_v1',
+          'animator21': 'animator_v21',
+          'xmode': 'xmode_v21',
+          'community': 'private_community',
+          'fansly': 'fansly_bundle'
+        };
+        const itemId = apiIdMap[prod.id] || prod.id;
+
         try {
-          const res = await fetch('/api/cryptomus/create-payment', {
+          const res = await fetch('/api/create-payment', {
             method: 'POST', headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ product: prod.id, amount: prod.price })
+            body: JSON.stringify({ item_id: itemId })
           });
           const data = await res.json();
           if (data.success && data.url) { window.location.href = data.url; }
-          else { alert('Ошибка создания платежа. Попробуйте позже.'); }
-        } catch (err) { alert('Ошибка сети. Попробуйте позже.'); }
-        finally { buyBtn.disabled = false; buyBtn.innerHTML = 'Купить / Получить доступ <span>→</span>'; }
+          else { showToast('Не получилось создать счёт, напиши в Telegram @Pravaka'); }
+        } catch (err) { showToast('Не получилось создать счёт, напиши в Telegram @Pravaka'); }
+        finally { buyBtn.disabled = false; buyBtn.innerHTML = 'Оплатить криптой <span>→</span>'; }
       });
     }
   }
@@ -527,20 +552,139 @@
 
       // Pricing block
       const pricingEl = document.getElementById('svc-modal-pricing');
+      const mainBtn = document.getElementById('svc-modal-main-btn');
+      if (mainBtn) mainBtn.style.display = 'none';
+
       if (pricingEl && s.pricing) {
-        let html = s.pricing.map((p, i) => `
-          <div class="pricing-variant">
-            <div class="pricing-variant__head">
-              <span class="pricing-variant__name">Вариант ${i + 1} — ${p.title}</span>
-              <span class="pricing-variant__price">${p.price}</span>
+        let html = '';
+        if (s.id === 'avatars') {
+          html = `
+            <div class="svc-modal-variants">
+              <div class="pricing-variant">
+                <div class="pricing-variant__head">
+                  <span class="pricing-variant__name">Вариант 1 — ${s.pricing[0].title}</span>
+                  <span class="pricing-variant__price">${s.pricing[0].price}</span>
+                </div>
+                <p class="pricing-variant__desc">${s.pricing[0].desc}</p>
+                <div class="pricing-variant__action" style="margin-top: 16px;">
+                  <button class="btn btn--primary btn--full svc-pay-btn" data-item-id="avatar_basic" data-base-price="55" data-qty="1">Оплатить $55 <span>→</span></button>
+                </div>
+              </div>
+              <div class="pricing-variant">
+                <div class="pricing-variant__head">
+                  <span class="pricing-variant__name">Вариант 2 — ${s.pricing[1].title}</span>
+                  <span class="pricing-variant__price">${s.pricing[1].price}</span>
+                </div>
+                <p class="pricing-variant__desc">${s.pricing[1].desc}</p>
+                <div class="pricing-variant__action" style="margin-top: 16px;">
+                  <button class="btn btn--primary btn--full svc-pay-btn" data-item-id="avatar_lora" data-base-price="100" data-qty="1">Оплатить $100 <span>→</span></button>
+                </div>
+              </div>
             </div>
-            <p class="pricing-variant__desc">${p.desc}</p>
-          </div>`).join('');
-        if (s.pricingNote) {
-          html += `<p class="pricing-note">${s.pricingNote}</p>`;
+            <p class="pricing-note">${s.pricingNote}</p>
+            <p class="pricing-disclaimer">Точный расчёт — после брифа. Минимальный заказ — $70.</p>
+            <div class="pricing-footnote-sec">Оплата cryptocurrency через Cryptomus. Доступ выдаётся вручную в Telegram после оплаты.</div>
+          `;
+        } else if (s.id === 'video') {
+          html = `
+            <div class="duration-selector-wrap" style="margin-bottom: 20px; display: flex; align-items: center; gap: 12px;">
+              <label for="duration-select" style="font-family: var(--font-mono); font-size: 12px; color: var(--muted); text-transform: uppercase;">Длительность ролика:</label>
+              <select id="duration-select" class="duration-select" style="background: var(--surface); border: 1px solid var(--line); color: var(--ink); padding: 6px 12px; border-radius: 6px; font-family: var(--font-mono);">
+                <option value="1">15 сек</option>
+                <option value="2">30 сек</option>
+                <option value="3">45 сек</option>
+                <option value="4">60 сек</option>
+                <option value="6">90 сек</option>
+                <option value="8">120 сек</option>
+              </select>
+            </div>
+            <div class="svc-modal-variants">
+              <div class="pricing-variant">
+                <div class="pricing-variant__head">
+                  <span class="pricing-variant__name">Вариант 1 — ${s.pricing[0].title}</span>
+                  <span class="pricing-variant__price" id="price-val-video-gen">$35</span>
+                </div>
+                <p class="pricing-variant__desc">${s.pricing[0].desc}</p>
+                <div class="pricing-variant__action" style="margin-top: 16px;">
+                  <button class="btn btn--primary btn--full svc-pay-btn" id="pay-btn-video-gen" data-item-id="video_gen_15s" data-base-price="35" data-qty="1">Оплатить $35 <span>→</span></button>
+                </div>
+              </div>
+              <div class="pricing-variant">
+                <div class="pricing-variant__head">
+                  <span class="pricing-variant__name">Вариант 2 — ${s.pricing[1].title}</span>
+                  <span class="pricing-variant__price" id="price-val-video-turnkey">$50</span>
+                </div>
+                <p class="pricing-variant__desc">${s.pricing[1].desc}</p>
+                <div class="pricing-variant__action" style="margin-top: 16px;">
+                  <button class="btn btn--primary btn--full svc-pay-btn" id="pay-btn-video-turnkey" data-item-id="video_turnkey_15s" data-base-price="50" data-qty="1">Оплатить $50 <span>→</span></button>
+                </div>
+              </div>
+            </div>
+            <p class="pricing-disclaimer">Точный расчёт — после брифа. Минимальный заказ — $70.</p>
+            <div class="pricing-footnote-sec">Оплата криптовалютой через Cryptomus. Доступ выдаётся вручную в Telegram после оплаты.</div>
+          `;
+        } else if (s.id === 'lipsync') {
+          html = `
+            <div class="duration-selector-wrap" style="margin-bottom: 20px; display: flex; align-items: center; gap: 12px;">
+              <label for="duration-select" style="font-family: var(--font-mono); font-size: 12px; color: var(--muted); text-transform: uppercase;">Длительность ролика:</label>
+              <select id="duration-select" class="duration-select" style="background: var(--surface); border: 1px solid var(--line); color: var(--ink); padding: 6px 12px; border-radius: 6px; font-family: var(--font-mono);">
+                <option value="1">15 сек</option>
+                <option value="2">30 сек</option>
+                <option value="3">45 сек</option>
+                <option value="4">60 сек</option>
+                <option value="6">90 сек</option>
+                <option value="8">120 сек</option>
+              </select>
+            </div>
+            <div class="svc-modal-variants">
+              <div class="pricing-variant">
+                <div class="pricing-variant__head">
+                  <span class="pricing-variant__name">${s.pricing[0].title}</span>
+                  <span class="pricing-variant__price" id="price-val-lipsync">$30</span>
+                </div>
+                <p class="pricing-variant__desc">${s.pricing[0].desc}</p>
+                <div class="pricing-variant__action" style="margin-top: 16px;">
+                  <button class="btn btn--primary btn--full svc-pay-btn" id="pay-btn-lipsync" data-item-id="lipsync_15s" data-base-price="30" data-qty="1">Оплатить $30 <span>→</span></button>
+                </div>
+              </div>
+            </div>
+            <p class="pricing-disclaimer">Точный расчёт — после брифа. Минимальный заказ — $70.</p>
+            <div class="pricing-footnote-sec">Оплата криптовалютой через Cryptomus. Доступ выдаётся вручную в Telegram после оплаты.</div>
+          `;
+        } else {
+          html = `
+            <div class="pricing-variant">
+              <p class="pricing-variant__desc" style="margin-top:0">${s.pricing[0].desc}</p>
+              <div class="pricing-variant__action" style="margin-top: 16px;">
+                <a class="btn btn--primary btn--full" href="https://t.me/Pravaka" target="_blank" rel="noopener">Обсудить в Telegram <span>→</span></a>
+              </div>
+            </div>
+            <p class="pricing-disclaimer">Финальная стоимость согласовывается индивидуально.</p>
+          `;
         }
-        html += `<p class="pricing-disclaimer">Точный расчёт — после брифа. Минимальный заказ — $70.</p>`;
         pricingEl.innerHTML = html;
+
+        // Dynamic select updates
+        const select = pricingEl.querySelector('#duration-select');
+        if (select) {
+          select.addEventListener('change', () => {
+            const qty = parseInt(select.value, 10) || 1;
+            pricingEl.querySelectorAll('.svc-pay-btn').forEach(btn => {
+              const basePrice = parseInt(btn.dataset.basePrice, 10);
+              const total = basePrice * qty;
+              btn.dataset.qty = qty;
+              btn.innerHTML = `Оплатить $${total} <span>→</span>`;
+              
+              if (btn.id === 'pay-btn-video-gen') {
+                document.getElementById('price-val-video-gen').textContent = `$${total}`;
+              } else if (btn.id === 'pay-btn-video-turnkey') {
+                document.getElementById('price-val-video-turnkey').textContent = `$${total}`;
+              } else if (btn.id === 'pay-btn-lipsync') {
+                document.getElementById('price-val-lipsync').textContent = `$${total}`;
+              }
+            });
+          });
+        }
       }
 
       modal.classList.add('is-open'); modal.setAttribute('aria-hidden', 'false'); document.body.style.overflow = 'hidden';
@@ -557,6 +701,38 @@
     });
     modal.querySelectorAll('[data-modal-close]').forEach(el => el.addEventListener('click', close));
     document.addEventListener('keydown', e => { if (e.key === 'Escape' && modal.classList.contains('is-open')) close(); });
+
+    // Delegate service pay button click
+    document.addEventListener('click', async e => {
+      const payBtn = e.target.closest('.svc-pay-btn');
+      if (payBtn) {
+        const itemId = payBtn.dataset.itemId;
+        const qty = parseInt(payBtn.dataset.qty || 1, 10);
+        
+        payBtn.disabled = true;
+        const originalHTML = payBtn.innerHTML;
+        payBtn.innerHTML = 'Создаём платёж... <span class="spinner"></span>';
+        
+        try {
+          const res = await fetch('/api/create-payment', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ item_id: itemId, qty })
+          });
+          const data = await res.json();
+          if (data.success && data.url) {
+            window.location.href = data.url;
+          } else {
+            showToast('Не получилось создать счёт, напиши в Telegram @Pravaka');
+          }
+        } catch (err) {
+          showToast('Не получилось создать счёт, напиши в Telegram @Pravaka');
+        } finally {
+          payBtn.disabled = false;
+          payBtn.innerHTML = originalHTML;
+        }
+      }
+    });
   }
 
   /* === LEAD FORM === */
@@ -779,105 +955,7 @@
     });
   }
 
-  /* ================================================================
-     TASK 8 — HELMET GHOST (knight helmet with red eyes)
-     ================================================================ */
-  function initHelmetGhost() {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    
-    const maxHelmets = 2;
-    const activeHelmets = [];
-    const HELMET_SVG = `<svg viewBox="0 0 120 140" fill="none" xmlns="http://www.w3.org/2000/svg" class="helmet-svg">
-      <path d="M60 8C32 8 16 28 16 56v32c0 8 4 16 10 22l6 6c4 4 8 8 8 14v4h40v-4c0-6 4-10 8-14l6-6c6-6 10-14 10-22V56c0-28-16-48-44-48z" stroke="rgba(255,255,255,0.06)" stroke-width="1.5"/>
-      <path d="M16 72h88" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
-      <path d="M16 72c0 0 12 4 44 4s44-4 44-4v8c0 0-12 6-44 6s-44-6-44-6v-8z" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
-      <rect class="helmet-eye" x="32" y="56" width="18" height="5" rx="1"/>
-      <rect class="helmet-eye" x="70" y="56" width="18" height="5" rx="1"/>
-      <path d="M54 72v20M66 72v20" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
-      <path d="M48 92h24" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
-      <path d="M60 8v-4M60 4l-8 4M60 4l8 4" stroke="rgba(225,29,42,0.3)" stroke-width="1.5"/>
-    </svg>`;
 
-    function spawnHelmet() {
-      if (activeHelmets.length >= maxHelmets) return;
-      
-      const el = document.createElement('div');
-      el.className = 'helmet-ghost';
-      el.innerHTML = HELMET_SVG;
-      
-      const x = 15 + Math.random() * 65; // 15-80%
-      const y = 15 + Math.random() * 60; // 15-75%
-      el.style.left = x + '%';
-      el.style.top = y + '%';
-      
-      document.body.appendChild(el);
-      activeHelmets.push(el);
-      
-      // Trigger fade-in
-      requestAnimationFrame(() => {
-        el.classList.add('is-visible');
-      });
-      
-      // Eyes glow
-      const eyes = el.querySelectorAll('.helmet-eye');
-      const glowTimeout = setTimeout(() => {
-        eyes.forEach(eye => eye.classList.add('is-glowing'));
-      }, 400);
-      
-      let isRemoved = false;
-      
-      function removeHelmet() {
-        if (isRemoved) return;
-        isRemoved = true;
-        clearTimeout(glowTimeout);
-        el.classList.remove('is-visible');
-        el.style.transform = 'scale(0.8) translateY(-10px)';
-        
-        // Remove from DOM and active array
-        const idx = activeHelmets.indexOf(el);
-        if (idx !== -1) activeHelmets.splice(idx, 1);
-        
-        setTimeout(() => {
-          el.remove();
-        }, 800);
-      }
-      
-      el.removeHelmetFn = removeHelmet;
-      
-      // Auto remove after 4-5 seconds
-      const lifespan = 4000 + Math.random() * 1000;
-      setTimeout(removeHelmet, lifespan);
-    }
-    
-    // Proximity hover detection (global mousemove)
-    document.addEventListener('mousemove', e => {
-      if (activeHelmets.length === 0) return;
-      const mouseX = e.clientX;
-      const mouseY = e.clientY;
-      
-      activeHelmets.forEach(el => {
-        const rect = el.getBoundingClientRect();
-        const centerX = rect.left + rect.width / 2;
-        const centerY = rect.top + rect.height / 2;
-        const dist = Math.hypot(mouseX - centerX, mouseY - centerY);
-        
-        // If cursor is within 70px of the center of the helmet, it vanishes
-        if (dist < 70) {
-          if (el.removeHelmetFn) el.removeHelmetFn();
-        }
-      });
-    });
-    
-    // Spawn interval: check and spawn every 10s check
-    setInterval(() => {
-      if (activeHelmets.length < maxHelmets && Math.random() > 0.4) {
-        spawnHelmet();
-      }
-    }, 10000);
-    
-    // Initial spawn
-    setTimeout(spawnHelmet, 6000);
-  }
 
   /* ================================================================
      TASK 8 — CURSOR TRAIL (red dot + ember trail, desktop only)
@@ -986,8 +1064,7 @@
     initFAQ();
     initPortfolioMedia();
 
-    // Task 8: helmet ghost + cursor trail
-    initHelmetGhost();
+    // Task 8: cursor trail
     initCursorTrail();
 
     // Intersection observer reveal AFTER rendering cards
