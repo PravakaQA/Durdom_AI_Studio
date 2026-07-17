@@ -457,13 +457,16 @@
       if (p.access) { accS.style.display = ''; accP.textContent = p.access; } else { accS.style.display = 'none'; }
       // Buy button: change text for "по запросу" items
       const buyBtn = document.getElementById('modal-buy');
+      const trustBadge = document.getElementById('modal-trust-badge');
       if (buyBtn) {
         if (p.price === null) {
           buyBtn.innerHTML = 'Написать в Telegram <span>→</span>';
           buyBtn.dataset.action = 'telegram';
+          if (trustBadge) trustBadge.style.display = 'none';
         } else {
           buyBtn.innerHTML = 'Оплатить криптой <span>→</span>';
           buyBtn.dataset.action = 'buy';
+          if (trustBadge) trustBadge.style.display = 'flex';
         }
       }
       modal.classList.add('is-open'); modal.setAttribute('aria-hidden', 'false'); document.body.style.overflow = 'hidden';
